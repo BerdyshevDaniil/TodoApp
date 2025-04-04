@@ -1,0 +1,12 @@
+GET {{TodoApp_HostAddress}}/api/todo
+Accept: application/json
+
+###
+
+POST {{TodoApp_HostAddress}}/api/todo
+Content-Type: application/json
+
+{
+    "title": "Test Task",
+    "isCompleted": false
+}

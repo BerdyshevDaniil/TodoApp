@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo App</title>
+    <style>
+        .completed {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <h1>Todo List</h1>
+    <input id="todoInput" type="text" placeholder="New todo...">
+    <button onclick="addTodo()">Add</button>
+    <ul id="todoList"></ul>
+
+    <script>
+        async function loadTodos() {
+            const response = await fetch('/api/todo');
+            const todos = await response.json();
+            const list = document.getElementById('todoList');
+            list.innerHTML = '';
+            todos.forEach(todo => {
+                const li = document.createElement('li');
+                li.textContent = todo.title;
+                if (todo.isCompleted) li.classList.add('completed');
+                list.appendChild(li);
+            });
+        }
+
+        async function addTodo() {
+            const input = document.getElementById('todoInput');
+            const title = input.value;
+            if (title) {
+                await fetch('/api/todo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, isCompleted: false })
+                });
+                input.value = '';
+                loadTodos();
+            }
+        }
+
+        loadTodos();
+    </script>
+</body>
+</html>
